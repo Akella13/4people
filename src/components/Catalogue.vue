@@ -2,10 +2,12 @@
   <section>
     <ul>
       <li v-for="group in groupedGoods" :key="group.id">
-        <h3>GroupId: {{ group.id }}</h3>
+        <h3>{{ GroupName(group.id) }}</h3>
         <ul>
           <li v-for="(good, index) in group.goods" :key="index">
-            {{ good }}
+            {{ GoodName(group.id, good.id) }}
+            ({{ good.inStock }})
+            <b>{{ PriceRub(good.priceUSD) }}</b>
           </li>
         </ul>
       </li>
@@ -15,6 +17,7 @@
 
 <script>
 import goods from '/task/data.json';
+import names from '/task/names.json';
 
 export default {
   data() {
@@ -27,6 +30,8 @@ export default {
           inStock: el.P,
         };
       }),
+      names: names,
+      currency: 74.3,
     };
   },
   computed: {
@@ -48,6 +53,17 @@ export default {
         return acc;
       }, [])
     },
+  },
+  methods: {
+    GroupName(groupId) {
+      return this.names[groupId].G;
+    },
+    GoodName(groupId, goodId) {
+      return this.names[groupId].B[goodId].N;
+    },
+    PriceRub(usd) {
+      return Math.round(this.currency * usd);
+    }
   },
 }
 </script>
