@@ -1,7 +1,7 @@
 <template>
   <main>
-    <Catalogue @buy="AddToCart"/>
-    <Cart :added="addedItem"/>
+    <Catalogue @buy="(good) => { addedItem = good }" />
+    <Cart :added="addedItem" />
   </main>
 </template>
 
@@ -19,12 +19,6 @@ export default {
     return {
       addedItem: {},
     };
-  },
-  methods: {
-    AddToCart(good) {
-      // hack to add double of previous good
-      this.addedItem = { ...good };
-    }
   },
 }
 </script>
