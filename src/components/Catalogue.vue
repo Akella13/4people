@@ -8,6 +8,7 @@
             {{ GoodName(group.id, good.id) }}
             ({{ good.inStock }})
             <b>{{ PriceRub(good.priceUSD) }}</b>
+            <button @click="Buy(good)">Buy</button>
           </li>
         </ul>
       </li>
@@ -30,7 +31,7 @@ export default {
           inStock: el.P,
         };
       }),
-      names: names,
+      names,
       currency: 74.3,
     };
   },
@@ -63,7 +64,10 @@ export default {
     },
     PriceRub(usd) {
       return Math.round(this.currency * usd);
-    }
+    },
+    Buy(good) {
+      this.$emit('buy', good);
+    },
   },
 }
 </script>
