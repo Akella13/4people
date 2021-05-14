@@ -1,15 +1,17 @@
 <template>
-  <ul>
-    <li v-for="group in groupedGoods" :key="group.id">
-      <h3>{{ GroupName(group.id) }}</h3>
-      <ul>
-        <li v-for="(good, index) in group.goods" :key="index">
-          {{ GoodName(group.id, good.id) }}
-          ({{ good.inStock }})
-          <b :class="currencyRaised">
+  <ul class="groups">
+    <li v-for="group in groupedGoods" :key="group.id" class="group">
+      <h3 class="group__title">{{ GroupName(group.id) }}</h3>
+      <ul class="goods">
+        <li v-for="(good, index) in group.goods" :key="index" class="good">
+          <span class="good__title">
+            {{ GoodName(group.id, good.id) }}
+            ({{ good.inStock }})
+          </span>
+          <b :class="currencyRaised" class="good__price">
             {{ PriceRub(good.priceUSD) }}
           </b>
-          <button @click="Buy(good, group.id)">Buy</button>
+          <button class="button good__action" @click="Buy(good, group.id)">В корзину</button>
         </li>
       </ul>
     </li>
@@ -83,7 +85,6 @@ export default {
       });
     },
     ImportGoods() {
-      console.log('import')
       import('/task/data.json').then(a => {
         this.goods = a.Value.Goods.map(el => {
           return {
@@ -94,7 +95,61 @@ export default {
           };
         });
       });
-    }
+    },
   },
 }
 </script>
+
+<style>
+  .groups {
+    list-style-type: none;
+    padding: 0 1em;
+  }
+
+  .group {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1em;
+  }
+
+  .group__title {
+    background-color: #d2dde1;
+    border-bottom: 1px solid #ccc;
+    margin: unset;
+    padding-left: 1em;
+  }
+
+  .goods {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  .good {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .good:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .good:hover .good__action {
+    visibility: visible;
+  }
+
+  .good__title {
+    margin-left: 1em;
+    margin-right: auto;
+  }
+
+  .good__price {
+    margin-right: 1em;
+  }
+
+  .good__action {
+    margin: 0.25em;
+    visibility: hidden;
+    margin-right: 1em;
+  }
+</style>
