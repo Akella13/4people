@@ -1,7 +1,8 @@
 <template>
   <main>
-    <Catalogue @buy="(good) => { addedItem = good }" />
-    <Cart :added="addedItem" />
+    <input type="number" :min="20" :max="80" :step="5" v-model.number="currency" >
+    <Catalogue :currency="currency" @buy="(good) => { addedItem = good }" />
+    <Cart :added="addedItem" :currency="currency" />
   </main>
 </template>
 
@@ -18,6 +19,7 @@ export default {
   data() {
     return {
       addedItem: {},
+      currency: 74.3,
     };
   },
 }

@@ -1,38 +1,33 @@
 <template>
-  <section>
-    <ul>
-      <li v-for="group in groupedGoods" :key="group.id">
-        <h3>{{ GroupName(group.id) }}</h3>
-        <ul>
-          <li v-for="(good, index) in group.goods" :key="index">
-            {{ GoodName(group.id, good.id) }}
-            ({{ good.inStock }})
-            <b>{{ PriceRub(good.priceUSD) }}</b>
-            <button @click="Buy(good, group.id)">Buy</button>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </section>
+  <ul>
+    <li v-for="group in groupedGoods" :key="group.id">
+      <h3>{{ GroupName(group.id) }}</h3>
+      <ul>
+        <li v-for="(good, index) in group.goods" :key="index">
+          {{ GoodName(group.id, good.id) }}
+          ({{ good.inStock }})
+          <b :class="currencyRaised">
+            {{ PriceRub(good.priceUSD) }}
+          </b>
+          <button @click="Buy(good, group.id)">Buy</button>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </template>
 
 <script>
-import goods from '/task/data.json';
 import names from '/task/names.json';
 
 export default {
+  props: {
+    currency: Number,
+  },
   data() {
     return {
-      goods: goods.Value.Goods.map(el => {
-        return {
-          priceUSD: el.C,
-          groupId: el.G,
-          id: el.T,
-          inStock: el.P,
-        };
-      }),
+      goods: [],
       names,
-      currency: 74.3,
+      currencyRaised: null,
     };
   },
   computed: {
@@ -55,6 +50,22 @@ export default {
       }, [])
     },
   },
+  watch: {
+    currency(next, prev) {
+      const diff = next - prev;
+      if (diff > 0) {
+        this.currencyRaised = 'price--up';
+      } else if (diff < 0) {
+        this.currencyRaised = 'price--down';
+      } else {
+        this.currencyRaised = null;
+      }
+    },
+  },
+  mounted() {
+    this.ImportGoods();
+    setInterval(this.ImportGoods, 15000);
+  },
   methods: {
     GroupName(groupId) {
       return this.names[groupId].G;
@@ -71,6 +82,19 @@ export default {
         ...good,  
       });
     },
+    ImportGoods() {
+      console.log('import')
+      import('/task/data.json').then(a => {
+        this.goods = a.Value.Goods.map(el => {
+          return {
+            priceUSD: el.C,
+            groupId: el.G,
+            id: el.T,
+            inStock: el.P,
+          };
+        });
+      });
+    }
   },
 }
 </script>

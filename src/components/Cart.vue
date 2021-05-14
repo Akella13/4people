@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Cart:</h1>
+    <h4>Cart:</h4>
     <ul>
       <li v-for="(item, index) in items" :key="index">
         {{ GoodName(item.groupId, item.id) }}
@@ -22,12 +22,12 @@ export default {
       type: Object,
       default: () => {},
     },
+    currency: Number,
   },
   data() {
     return {
       items: [],
       names,
-      currency: 74.3,
     };
   },
   computed: {
