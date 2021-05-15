@@ -56,9 +56,9 @@ export default {
     currency(next, prev) {
       const diff = next - prev;
       if (diff > 0) {
-        this.currencyRaised = 'price--up';
+        this.currencyRaised = 'good__price--up';
       } else if (diff < 0) {
-        this.currencyRaised = 'price--down';
+        this.currencyRaised = 'good__price--down';
       } else {
         this.currencyRaised = null;
       }
@@ -145,6 +145,19 @@ export default {
 
   .good__price {
     margin-right: 1em;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    min-width: 4em;
+    justify-content: center;
+  }
+
+  .good__price--up {
+    background-color: rgba(100, 0, 0, 0.6);
+  }
+
+  .good__price--down {
+    background-color: rgba(0, 100, 0, 0.6);
   }
 
   .good__action {
